@@ -7,9 +7,15 @@ const Total = document.getElementById('total')
 const Count = document.getElementById('count')
 const Category = document.getElementById('category')
 const Submit = document.getElementById('submit')
- 
-//get total
 
+//get total
+const getTotal = () => {
+    if (parseInt(Price.value) !== '') {
+        let result = (+Price.value + +Taxes.value + +Ads.value) - +Discount.value
+        Total.textContent = result
+ 
+    }
+}
 
 //create prodact
 
