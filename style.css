@@ -1,15 +1,16 @@
-:root{
-    --dark: #fff;
-    --light: #222;
+:root {
+    --dark: #222;
+    --light: #fff;
 }
+
 * {
     margin: 0;
     padding: 0;
 }
 
 body {
-    background:var(--dark);
-    color:var(--light);
+    background: var(--dark);
+    color: var(--light);
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -40,15 +41,16 @@ input::placeholder {
     text-transform: capitalize;
 }
 
- 
+
 .price input {
     width: 20%;
 }
 
 #total {
-    background: crimson;
+    background: #f77575;
     border-radius: 4px;
     padding: 5px 4px;
+    color: #222;
 }
 
 #total::before {
@@ -75,16 +77,17 @@ button {
     width: 45%;
 }
 
-table{
+table {
     width: 100%;
     text-align: center;
     margin: 1rem 0;
     border-collapse: collapse;
 }
 
-table, th, td{
+table, th, td {
     border: 1px solid var(--light);
 }
-th, td{
+
+th, td {
     padding: 5px;
 }
