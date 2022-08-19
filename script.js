@@ -10,13 +10,45 @@ const Submit = document.getElementById('submit')
 
 const Tbody = document.querySelector('table tbody')
 
-let myProducts = []
-//get total
 let i = 0
+
+//////// create and append td
+const createTd = (value) => {
+    let td = document.createElement('td')
+    td.textContent = value
+    return td
+}
+
+///load from local storage
+let myProducts = JSON.parse(localStorage.getItem('products'))
+console.log(myProducts);
+
+const fillTable = () => {
+
+    myProducts.forEach(item => {
+        let tr = document.createElement('tr')
+
+        let id = createTd(item.id)
+        let title = createTd(item.title)
+        let price = createTd(item.price)
+        let tax = createTd(item.tax)
+        let ads = createTd(item.ads)
+        let discount = createTd(item.discount)
+        let total = createTd(item.total)
+        let count = createTd(item.count)
+        let category = createTd(item.category)
+
+        tr.append(id, title, price, tax, ads, discount, total, count, category)
+        Tbody.appendChild(tr)
+    })
+}
+
+fillTable()
 
 const checkInput = (value) => {
     return isNaN(parseInt(value)) ? 0 : parseInt(value)
 }
+//get total
 
 const getTotal = () => {
 
@@ -35,12 +67,7 @@ const getTotal = () => {
 
 //create product
 
-//////// create and append td
-const createTd = (value) => {
-    let td = document.createElement('td')
-    td.textContent = value
-    return td
-}
+
 Submit.addEventListener('click', () => {
     let product = {
         id: i,
@@ -53,13 +80,13 @@ Submit.addEventListener('click', () => {
         count: Count.value,
         category: Category.value
     }
+    let tr = document.createElement('tr')
 
     myProducts.push(product)
     i++
 
     localStorage.setItem('products', JSON.stringify(myProducts))
 
-    let tr = document.createElement('tr')
 
     let id = createTd(product.id)
     let title = createTd(product.title)
@@ -71,7 +98,7 @@ Submit.addEventListener('click', () => {
     let count = createTd(product.count)
     let category = createTd(product.category)
 
-    tr.append(id,title,  price,tax, ads, discount, total, count, category)
+    tr.append(id, title, price, tax, ads, discount, total, count, category)
 
     Tbody.appendChild(tr)
 })
