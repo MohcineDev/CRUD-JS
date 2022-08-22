@@ -10,7 +10,7 @@ const Submit = document.getElementById('submit')
 
 const Tbody = document.querySelector('table tbody')
 
-let i = 0
+let idCount = 0
 
 //////// create and append td
 const createTd = (value) => {
@@ -20,30 +20,12 @@ const createTd = (value) => {
 }
 
 ///load from local storage
-let myProducts = JSON.parse(localStorage.getItem('products'))
+//check if the local storage is empty or NOT
+let myProducts = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : []
+
 console.log(myProducts);
 
-const fillTable = () => {
 
-    myProducts.forEach(item => {
-        let tr = document.createElement('tr')
-
-        let id = createTd(item.id)
-        let title = createTd(item.title)
-        let price = createTd(item.price)
-        let tax = createTd(item.tax)
-        let ads = createTd(item.ads)
-        let discount = createTd(item.discount)
-        let total = createTd(item.total)
-        let count = createTd(item.count)
-        let category = createTd(item.category)
-
-        tr.append(id, title, price, tax, ads, discount, total, count, category)
-        Tbody.appendChild(tr)
-    })
-}
-
-fillTable()
 
 const checkInput = (value) => {
     return isNaN(parseInt(value)) ? 0 : parseInt(value)
@@ -70,44 +52,67 @@ const getTotal = () => {
 
 Submit.addEventListener('click', () => {
     let product = {
-        id: i,
+        id: idCount,
         title: Title.value,
         price: Price.value,
         tax: Taxes.value,
         ads: Ads.value,
         discount: Discount.value,
         total: Total.textContent,
-        count: Count.value,
         category: Category.value
     }
-    let tr = document.createElement('tr')
 
     myProducts.push(product)
-    i++
+    idCount++
 
+    //save data  in local storage
     localStorage.setItem('products', JSON.stringify(myProducts))
 
+    addTableRow(product)
 
-    let id = createTd(product.id)
-    let title = createTd(product.title)
-    let price = createTd(product.price)
-    let tax = createTd(product.tax)
-    let ads = createTd(product.ads)
-    let discount = createTd(product.discount)
-    let total = createTd(product.total)
-    let count = createTd(product.count)
-    let category = createTd(product.category)
-
-    tr.append(id, title, price, tax, ads, discount, total, count, category)
-
-    Tbody.appendChild(tr)
+    clearInputs()
 })
 
-//save data  in local storage
-
-//clear inputs
 
 //read data
+const fillTable = () => {
+
+    myProducts.forEach(item => {
+        addTableRow(item)
+    })
+}
+
+//add one table Row tr
+const addTableRow = (item) => {
+    let tr = document.createElement('tr')
+
+    let id = createTd(item.id)
+    let title = createTd(item.title)
+    let price = createTd(item.price)
+    let tax = createTd(item.tax)
+    let ads = createTd(item.ads)
+    let discount = createTd(item.discount)
+    let total = createTd(item.total)
+    let category = createTd(item.category)
+
+    tr.append(id, title, price, tax, ads, discount, total, category)
+    Tbody.appendChild(tr)
+}
+
+//clear inputs
+const clearInputs = () => {
+    Title.value = ''
+    Price.value = ''
+    Taxes.value = ''
+    Ads.value = ''
+    Discount.value = ''
+    Total.textContent = ''
+    Count.value = ''
+    Category.value = ''
+}
+
+
+fillTable()
 
 //count
 
