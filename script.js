@@ -10,7 +10,7 @@ const Submit = document.getElementById('submit')
 
 const Tbody = document.querySelector('table tbody')
 
-let idCount = 0
+let idCount = 1
 
 //////// create and append td
 const createTd = (value) => {
@@ -63,7 +63,6 @@ Submit.addEventListener('click', () => {
     }
 
     myProducts.push(product)
-    idCount++
 
     //save data  in local storage
     localStorage.setItem('products', JSON.stringify(myProducts))
@@ -80,6 +79,22 @@ const fillTable = () => {
     myProducts.forEach(item => {
         addTableRow(item)
     })
+
+}
+
+//delete
+const deleteItem = (id, btn) => {
+
+  btn.parentElement.parentElement.remove()
+    // let trs=document.querySelectorAll('table tr')
+    // trs[0].remove()
+
+    console.log(btn.dataset.rowid);
+let itemIndex=    myProducts.findIndex(item => item.id == btn.dataset.rowid)
+console.log('itemIndex : ', itemIndex);
+    myProducts.splice(itemIndex, 1)
+    localStorage.setItem('products', JSON.stringify(myProducts))
+    console.log('delete', id);
 }
 
 //add one table Row tr
@@ -95,8 +110,26 @@ const addTableRow = (item) => {
     let total = createTd(item.total)
     let category = createTd(item.category)
 
-    tr.append(id, title, price, tax, ads, discount, total, category)
+    //btns
+    let deleteTd = document.createElement('td')
+    let deleteBtn = document.createElement('button')
+    deleteTd.appendChild(deleteBtn)
+    deleteBtn.textContent = 'delete'
+    deleteBtn.setAttribute('id', 'delete')
+    deleteBtn.setAttribute('data-rowid', item.id)
+//delete item event
+    deleteBtn.addEventListener('click', () => deleteItem(item.id, deleteBtn))
+
+    let updateTd = document.createElement('td')
+    let updateBtn = document.createElement('button')
+    updateTd.appendChild(updateBtn)
+    updateBtn.textContent = 'update'
+    updateBtn.setAttribute('id', 'update')
+
+
+    tr.append(id, title, price, tax, ads, discount, total, category, updateTd, deleteTd)
     Tbody.appendChild(tr)
+    idCount++
 }
 
 //clear inputs
@@ -115,8 +148,6 @@ const clearInputs = () => {
 fillTable()
 
 //count
-
-//delete
 
 //update
 
