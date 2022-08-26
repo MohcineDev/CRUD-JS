@@ -23,9 +23,6 @@ const createTd = (value) => {
 //check if the local storage is empty or NOT
 let myProducts = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : []
 
-console.log(myProducts);
-
-
 
 const checkInput = (value) => {
     return isNaN(parseInt(value)) ? 0 : parseInt(value)
@@ -48,54 +45,34 @@ const getTotal = () => {
 }
 
 //create product
-
-
 Submit.addEventListener('click', () => {
-    let product = {
-        id: idCount,
-        title: Title.value,
-        price: Price.value,
-        tax: Taxes.value,
-        ads: Ads.value,
-        discount: Discount.value,
-        total: Total.textContent,
-        category: Category.value
-    }
+ 
 
-    myProducts.push(product)
+    if (checkInput(Count.value)) {
+        let countNum = checkInput(Count.value)
+        for (let i = 0; i < countNum; i++) {
+            let product = {
+                title: Title.value,
+                price: Price.value,
+                tax: Taxes.value,
+                ads: Ads.value,
+                discount: Discount.value,
+                total: Total.textContent,
+                category: Category.value
+            }
+            product.id = idCount
+            addTableRow(product)
+            myProducts.push(product)
+    idCount++
+}
+    }
 
     //save data  in local storage
     localStorage.setItem('products', JSON.stringify(myProducts))
 
-    addTableRow(product)
-
     clearInputs()
 })
 
-
-//read data
-const fillTable = () => {
-
-    myProducts.forEach(item => {
-        addTableRow(item)
-    })
-
-}
-
-//delete
-const deleteItem = (id, btn) => {
-
-  btn.parentElement.parentElement.remove()
-    // let trs=document.querySelectorAll('table tr')
-    // trs[0].remove()
-
-    console.log(btn.dataset.rowid);
-let itemIndex=    myProducts.findIndex(item => item.id == btn.dataset.rowid)
-console.log('itemIndex : ', itemIndex);
-    myProducts.splice(itemIndex, 1)
-    localStorage.setItem('products', JSON.stringify(myProducts))
-    console.log('delete', id);
-}
 
 //add one table Row tr
 const addTableRow = (item) => {
@@ -117,7 +94,7 @@ const addTableRow = (item) => {
     deleteBtn.textContent = 'delete'
     deleteBtn.setAttribute('id', 'delete')
     deleteBtn.setAttribute('data-rowid', item.id)
-//delete item event
+    //delete item event
     deleteBtn.addEventListener('click', () => deleteItem(item.id, deleteBtn))
 
     let updateTd = document.createElement('td')
@@ -129,7 +106,6 @@ const addTableRow = (item) => {
 
     tr.append(id, title, price, tax, ads, discount, total, category, updateTd, deleteTd)
     Tbody.appendChild(tr)
-    idCount++
 }
 
 //clear inputs
@@ -144,6 +120,31 @@ const clearInputs = () => {
     Category.value = ''
 }
 
+
+
+//read data
+const fillTable = () => {
+
+    myProducts.forEach(item => {
+        addTableRow(item)
+    })
+
+}
+
+//delete
+const deleteItem = (id, btn) => {
+
+    btn.parentElement.parentElement.remove()
+    // let trs=document.querySelectorAll('table tr')
+    // trs[0].remove()
+
+    console.log(btn.dataset.rowid);
+    let itemIndex = myProducts.findIndex(item => item.id == btn.dataset.rowid)
+    console.log('itemIndex : ', itemIndex);
+    myProducts.splice(itemIndex, 1)
+    localStorage.setItem('products', JSON.stringify(myProducts))
+    console.log('delete', id);
+}
 
 fillTable()
 
