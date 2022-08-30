@@ -10,7 +10,6 @@ const Submit = document.getElementById('submit')
 
 const Tbody = document.querySelector('table tbody')
 
-let idCount = 1
 
 //////// create and append td
 const createTd = (value) => {
@@ -23,6 +22,8 @@ const createTd = (value) => {
 //check if the local storage is empty or NOT
 let myProducts = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : []
 
+// set the initial id value
+let idCount = myProducts.length || 1
 
 const checkInput = (value) => {
     return isNaN(parseInt(value)) ? 0 : parseInt(value)
@@ -46,10 +47,10 @@ const getTotal = () => {
 
 //create product
 Submit.addEventListener('click', () => {
- 
 
-    if (checkInput(Count.value)) {
-        let countNum = checkInput(Count.value)
+    let countNum = checkInput(Count.value)
+
+    if (countNum) {
         for (let i = 0; i < countNum; i++) {
             let product = {
                 title: Title.value,
@@ -63,8 +64,8 @@ Submit.addEventListener('click', () => {
             product.id = idCount
             addTableRow(product)
             myProducts.push(product)
-    idCount++
-}
+            idCount++
+        }
     }
 
     //save data  in local storage
