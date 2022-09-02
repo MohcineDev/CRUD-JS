@@ -23,7 +23,8 @@ const createTd = (value) => {
 let myProducts = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : []
 
 // set the initial id value
-let idCount = myProducts.length || 1
+// let idCount = myProducts.length || 1
+let idCount = myProducts.length ? myProducts[myProducts.length - 1].id + 1 : 1
 
 const checkInput = (value) => {
     return isNaN(parseInt(value)) ? 0 : parseInt(value)
@@ -36,8 +37,6 @@ const getTotal = () => {
         let result = (checkInput(Price.value) + checkInput(Taxes.value) + checkInput(Ads.value)) - checkInput(Discount.value)
         Total.textContent = result
         Total.style.backgroundColor = 'rgb(204, 253, 204)'
-
-
     }
     else {
         Total.style.backgroundColor = '#f77575'
@@ -45,33 +44,55 @@ const getTotal = () => {
     }
 }
 
+//the product id to update
+let productIndex
+
+//updating state
+let updateMode = false
+
 //create product
 Submit.addEventListener('click', () => {
 
     let countNum = checkInput(Count.value)
+    if (!updateState) {
 
-    if (countNum) {
-        for (let i = 0; i < countNum; i++) {
-            let product = {
-                title: Title.value,
-                price: Price.value,
-                tax: Taxes.value,
-                ads: Ads.value,
-                discount: Discount.value,
-                total: Total.textContent,
-                category: Category.value
+        if (countNum) {
+            for (let i = 0; i < countNum; i++) {
+                let product = {
+                    title: Title.value,
+                    price: Price.value,
+                    tax: Taxes.value,
+                    ads: Ads.value,
+                    discount: Discount.value,
+                    total: Total.textContent,
+                    category: Category.value
+                }
+                product.id = idCount
+                addTableRow(product)
+                myProducts.push(product)
+                idCount++
             }
-            product.id = idCount
-            addTableRow(product)
-            myProducts.push(product)
-            idCount++
         }
-    }
 
+    }
+    else {
+        myProducts[productIndex].title = Title.value
+        myProducts[productIndex].price = Price.value
+        myProducts[productIndex].tax = Taxes.value
+        myProducts[productIndex].ads = Ads.value
+        myProducts[productIndex].discount = Discount.value
+        myProducts[productIndex].category = Category.value
+
+        Count.disabled = false
+        Submit.textContent = "Create"
+        fillTable()
+        updateState = false
+    }
     //save data  in local storage
     localStorage.setItem('products', JSON.stringify(myProducts))
 
     clearInputs()
+    getTotal()
 })
 
 
@@ -94,9 +115,8 @@ const addTableRow = (item) => {
     deleteTd.appendChild(deleteBtn)
     deleteBtn.textContent = 'delete'
     deleteBtn.setAttribute('id', 'delete')
-    deleteBtn.setAttribute('data-rowid', item.id)
     //delete item event
-    deleteBtn.addEventListener('click', () => deleteItem(item.id, deleteBtn))
+    deleteBtn.addEventListener('click', () => deleteProduct(item.id, deleteBtn))
 
     let updateTd = document.createElement('td')
     let updateBtn = document.createElement('button')
@@ -104,6 +124,8 @@ const addTableRow = (item) => {
     updateBtn.textContent = 'update'
     updateBtn.setAttribute('id', 'update')
 
+    //update item
+    updateBtn.addEventListener('click', () => updateProduct(item.id))
 
     tr.append(id, title, price, tax, ads, discount, total, category, updateTd, deleteTd)
     Tbody.appendChild(tr)
@@ -121,11 +143,10 @@ const clearInputs = () => {
     Category.value = ''
 }
 
-
-
 //read data
 const fillTable = () => {
-
+    //remove all the rows
+    Tbody.innerHTML = ''
     myProducts.forEach(item => {
         addTableRow(item)
     })
@@ -133,25 +154,41 @@ const fillTable = () => {
 }
 
 //delete
-const deleteItem = (id, btn) => {
+const deleteProduct = (id, btn) => {
 
     btn.parentElement.parentElement.remove()
     // let trs=document.querySelectorAll('table tr')
     // trs[0].remove()
 
-    console.log(btn.dataset.rowid);
-    let itemIndex = myProducts.findIndex(item => item.id == btn.dataset.rowid)
-    console.log('itemIndex : ', itemIndex);
+    let itemIndex = myProducts.findIndex(item => item.id == id)
     myProducts.splice(itemIndex, 1)
     localStorage.setItem('products', JSON.stringify(myProducts))
-    console.log('delete', id);
+}
+
+//update
+const updateProduct = (id) => {
+    let itemIndex = myProducts.findIndex(product => product.id == id)
+    let targetProduct = myProducts[itemIndex]
+
+    Title.value = targetProduct.title
+    Price.value = targetProduct.price
+    Taxes.value = targetProduct.tax
+    Ads.value = targetProduct.ads
+    Discount.value = targetProduct.discount
+    Category.value = targetProduct.category
+
+    getTotal()
+    Count.disabled = true
+
+    Submit.textContent = "Update"
+    productIndex = itemIndex
+
+    updateMode = true
 }
 
 fillTable()
 
-//count
 
-//update
 
 // search
 
