@@ -7,6 +7,10 @@ const Total = document.getElementById('total')
 const Count = document.getElementById('count')
 const Category = document.getElementById('category')
 const Submit = document.getElementById('submit')
+const searchInput = document.querySelector('#search')
+
+const searchTitle = document.querySelector('#searchTitle')
+const SearchCategory = document.querySelector('#SearchCategory')
 
 const Tbody = document.querySelector('table tbody')
 
@@ -54,7 +58,7 @@ let updateMode = false
 Submit.addEventListener('click', () => {
 
     let countNum = checkInput(Count.value)
-    if (!updateState) {
+    if (!updateMode) {
 
         if (countNum) {
             for (let i = 0; i < countNum; i++) {
@@ -72,6 +76,7 @@ Submit.addEventListener('click', () => {
                 myProducts.push(product)
                 idCount++
             }
+            clearInputs()
         }
 
     }
@@ -86,12 +91,11 @@ Submit.addEventListener('click', () => {
         Count.disabled = false
         Submit.textContent = "Create"
         fillTable()
-        updateState = false
+        updateMode = false
     }
     //save data  in local storage
     localStorage.setItem('products', JSON.stringify(myProducts))
 
-    clearInputs()
     getTotal()
 })
 
@@ -191,5 +195,36 @@ fillTable()
 
 
 // search
+
+const searchProducts = (e) => {
+
+    let foundProducts = []
+
+    if (!searchInput.value) {
+        return false
+    }
+    if (e.target.id === 'searchTitle') {
+        foundProducts = myProducts.filter(product => product.title === searchInput.value)
+
+        //remove all the rows
+        Tbody.innerHTML = ''
+        foundProducts.forEach(item => {
+            addTableRow(item)
+        })
+
+    }
+    else if (e.target.id === 'SearchCategory') {
+        foundProducts = myProducts.filter(product => product.category === searchInput.value)
+
+        //remove all the rows
+        Tbody.innerHTML = ''
+        foundProducts.forEach(item => {
+            addTableRow(item)
+        })
+    }
+}
+
+searchTitle.addEventListener('click', e => searchProducts(e))
+SearchCategory.addEventListener('click', e => searchProducts(e))
 
 //clean data
