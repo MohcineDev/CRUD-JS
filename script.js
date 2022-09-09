@@ -10,7 +10,8 @@ const Submit = document.getElementById('submit')
 const searchInput = document.querySelector('#search')
 
 const searchTitle = document.querySelector('#searchTitle')
-const SearchCategory = document.querySelector('#SearchCategory')
+const searchCategory = document.querySelector('#searchCategory')
+const Clear = document.querySelector('#clear')
 
 const Tbody = document.querySelector('table tbody')
 
@@ -193,7 +194,6 @@ const updateProduct = (id) => {
 fillTable()
 
 
-
 // search
 
 const searchProducts = (e) => {
@@ -201,20 +201,20 @@ const searchProducts = (e) => {
     let foundProducts = []
 
     if (!searchInput.value) {
+        
         return false
     }
     if (e.target.id === 'searchTitle') {
-        foundProducts = myProducts.filter(product => product.title === searchInput.value)
+        foundProducts = myProducts.filter(product => product.title.toLowerCase() === searchInput.value.toLowerCase())
 
         //remove all the rows
         Tbody.innerHTML = ''
         foundProducts.forEach(item => {
             addTableRow(item)
         })
-
     }
-    else if (e.target.id === 'SearchCategory') {
-        foundProducts = myProducts.filter(product => product.category === searchInput.value)
+    else if (e.target.id === 'searchCategory') {
+        foundProducts = myProducts.filter(product => product.category.toLowerCase() === searchInput.value.toLowerCase())
 
         //remove all the rows
         Tbody.innerHTML = ''
@@ -225,6 +225,8 @@ const searchProducts = (e) => {
 }
 
 searchTitle.addEventListener('click', e => searchProducts(e))
-SearchCategory.addEventListener('click', e => searchProducts(e))
-
+searchCategory.addEventListener('click', e => searchProducts(e))
+Clear.addEventListener('click', ()=>{
+    fillTable()
+})
 //clean data
