@@ -18,23 +18,27 @@
         </div>
 
         <div class="inputs">
-
-            <input type="text" name="" id="title" placeholder="title">
-            <div class="price">
-                <input type="number" onkeyup="getTotal()" id="price" placeholder="price">
-                <input type="number" onkeyup="getTotal()" id="taxes" placeholder="taxes">
-                <input type="number" onkeyup="getTotal()" id="ads" placeholder="ads">
-                <input type="number" onkeyup="getTotal()" id="discount" placeholder="discount">
-                <small id="total"></small>
-            </div>
-            <input type="number" name="" id="count" placeholder="count">
-            <input type="text" name="" id="category" placeholder="category">
-            <button id="submit">Create</button>
+            <form>
+                <input type="text" required id="title" placeholder="title">
+                <div class="price">
+                    <input type="number" required onkeyup="getTotal()" id="price" placeholder="price">
+                    <input type="number" onkeyup="getTotal()" id="taxes" placeholder="taxes">
+                    <input type="number" onkeyup="getTotal()" id="ads" placeholder="ads">
+                    <input type="number" onkeyup="getTotal()" id="discount" placeholder="discount">
+                    <small id="total"></small>
+                </div>
+                <input type="number" required min="1" max="100" id="count" placeholder="count">
+                <input type="text" required id="category" placeholder="category">
+                <button id="submit">Create</button>
+            </form>
         </div>
 
         <div class="outputs">
             <div class="searchBlock">
-                <input type="text" name="" id="search" placeholder="search">
+                <div id="searchInput">
+                    <input type="text" id="search" placeholder="search">
+                    <span>enter a value to search for!</span>
+                </div>
                 <div class="btnSearch">
                     <button id="searchTitle">Search By Title</button>
                     <button id="clear">Clear</button>

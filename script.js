@@ -8,10 +8,14 @@ const Count = document.getElementById('count')
 const Category = document.getElementById('category')
 const Submit = document.getElementById('submit')
 const searchInput = document.querySelector('#search')
+const form = document.querySelector('form')
 
 const searchTitle = document.querySelector('#searchTitle')
 const searchCategory = document.querySelector('#searchCategory')
 const Clear = document.querySelector('#clear')
+
+//error msg
+const searchError = document.querySelector('#searchInput span')
 
 const Tbody = document.querySelector('table tbody')
 
@@ -28,14 +32,13 @@ const createTd = (value) => {
 let myProducts = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : []
 
 // set the initial id value
-// let idCount = myProducts.length || 1
 let idCount = myProducts.length ? myProducts[myProducts.length - 1].id + 1 : 1
 
 const checkInput = (value) => {
     return isNaN(parseInt(value)) ? 0 : parseInt(value)
 }
-//get total
 
+//get total
 const getTotal = () => {
 
     if (checkInput(Price.value) != '') {
@@ -56,7 +59,7 @@ let productIndex
 let updateMode = false
 
 //create product
-Submit.addEventListener('click', () => {
+form.addEventListener('submit', () => {
 
     let countNum = checkInput(Count.value)
     if (!updateMode) {
@@ -160,11 +163,9 @@ const fillTable = () => {
 
 //delete
 const deleteProduct = (id, btn) => {
-
+    //delete from ui table
     btn.parentElement.parentElement.remove()
-    // let trs=document.querySelectorAll('table tr')
-    // trs[0].remove()
-
+    //delete from localStorage
     let itemIndex = myProducts.findIndex(item => item.id == id)
     myProducts.splice(itemIndex, 1)
     localStorage.setItem('products', JSON.stringify(myProducts))
@@ -201,7 +202,7 @@ const searchProducts = (e) => {
     let foundProducts = []
 
     if (!searchInput.value) {
-        
+        searchError.style.display = 'block'
         return false
     }
     if (e.target.id === 'searchTitle') {
@@ -222,11 +223,17 @@ const searchProducts = (e) => {
             addTableRow(item)
         })
     }
+    Clear.style.display = 'block'
+    searchError.style.display = 'none'
+
 }
 
 searchTitle.addEventListener('click', e => searchProducts(e))
 searchCategory.addEventListener('click', e => searchProducts(e))
-Clear.addEventListener('click', ()=>{
+
+Clear.addEventListener('click', (e) => {
     fillTable()
+    searchInput.value = ''
+    e.target.style.display = 'none'
 })
 //clean data

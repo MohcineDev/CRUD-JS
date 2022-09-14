@@ -40,7 +40,8 @@ input {
 
 input::placeholder {
     text-transform: capitalize;
-} 
+}
+
 .price input {
     width: 20%;
 }
@@ -65,13 +66,35 @@ button {
     cursor: pointer;
     width: 100%;
 }
- 
+
+#submit {
+    margin: 4px 0;
+}
+
+
 /* //outputs */
+
+#searchInput {
+    position: relative;
+}
+
+#searchInput span {
+    position: absolute;
+    left: 2rem;
+    top: 60%;
+    background-color: crimson;
+    padding: 2px 4px;
+    font-size: 14px;
+    border-radius: 5px;
+    display: none;
+}
+
 .btnSearch {
     display: flex;
     justify-content: space-between;
+    margin: 4px 0;
 }
- 
+
 .btnSearch button {
     width: auto;
 }
@@ -81,11 +104,22 @@ button {
     flex-grow: 1;
 }
 
-.btnSearch button:nth-child(2) {
-    margin: 0 1rem;
-    padding: 0 1rem;
+.btnSearch button:nth-child(1) {
+    margin-right: 0.5rem;
 }
 
+.btnSearch button:nth-child(3) {
+    margin-left: 0.5rem;
+
+}
+
+.btnSearch button:nth-child(2) {
+    padding: 0 1rem;
+    display: none;
+}
+
+
+/* table */
 table {
     width: 100%;
     text-align: center;
@@ -96,9 +130,11 @@ table {
 table, th, td {
     border: 1px solid var(--light);
 }
+
 table tr:hover {
     background-color: rgb(51, 51, 51);
 }
+
 th, td {
     padding: 5px;
 }
